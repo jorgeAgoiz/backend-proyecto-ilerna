@@ -1,0 +1,26 @@
+{
+  "name": "backend-proyecto-ilerna",
+  "version": "1.0.0",
+  "description": "REST API - Proyecto Final Ilerna Online",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jorgeAgoiz/backend-proyecto-ilerna.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jorgeAgoiz/backend-proyecto-ilerna/issues"
+  },
+  "homepage": "https://github.com/jorgeAgoiz/backend-proyecto-ilerna#readme",
+  "dependencies": {
+    "dotenv": "10.0.0",
+    "express": "4.17.1",
+    "mysql2": "2.3.0",
+    "nodemon": "2.0.12"
+  }
+}
