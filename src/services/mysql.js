@@ -8,12 +8,16 @@ const PORTDB = process.env.MYSQL_PORT;
 const NAMEDB = process.env.MYSQL_DATABASE;
 
 // Conexión a BBDD
-exports.connection = mysql.createConnection({
+connection = mysql.createConnection(
+  {
     host: HOSTDB,
     user: USERDB,
     password: PASSDB,
     port: PORTDB,
-    database: NAMEDB
-}, (err) => {
-    console.log(err)// Manejar ese error
-})
+    database: NAMEDB,
+  },
+  (err) => {
+    console.log(err); // Manejar ese error
+  }
+);
+
