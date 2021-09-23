@@ -15,5 +15,5 @@ exports.connection = mysql.createConnection({
     port: PORTDB,
     database: NAMEDB
 }, (err) => {
-    console.log(err)
+    console.log(err)// Manejar ese error
 })
