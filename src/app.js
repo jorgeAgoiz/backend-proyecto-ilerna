@@ -1,11 +1,13 @@
 require('dotenv').config();
 const express = require("express");
+const { connection } = require("./services/mysql");
+const authRoute = require("./routes/authRoute");
+
+// Variables de entorno
+const PORT = process.env.PORT;
 
 const app = express();
 
-app.get("/", (req, res, next) => {
-    console.log("Starting with the backend")
-    return res.send("<h1>Hey There!!</h1>")
-})
+app.use(authRoute);
 
-app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}...`))
+app.listen(PORT, () => console.log(`Listening on port ${PORT}...`))
