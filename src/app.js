@@ -5,6 +5,7 @@ const express = require("express");
 const { connection } = require("./services/mysql");
 const cors = require("cors");
 const authRoute = require("./routes/authRoute");
+const booksRoute = require("./routes/booksRoute");
 
 // Variables de entorno
 const PORT = process.env.PORT;
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Rutas
 app.use(authRoute);
+app.use(booksRoute);
 
 
 
