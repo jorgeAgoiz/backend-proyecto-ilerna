@@ -31,8 +31,8 @@ exports.signUp = async (req, res, next) => {
     }
   }
   return res
-    .status(400)
-    .json({ message: "Incomplete data.", status_code: 400, success: false });
+    .status(412)
+    .json({ message: "Incomplete data.", status_code: 412, success: false });
 };
 
 // POST => "/signin"
@@ -52,9 +52,9 @@ exports.signIn = async (req, res, next) => {
         );
 
         if (!matchPasswords) {
-          return res.status(400).json({
+          return res.status(401).json({
             message: "Incorrect password.",
-            status_code: 400,
+            status_code: 401,
             success: false,
           });
         }
@@ -85,9 +85,9 @@ exports.signIn = async (req, res, next) => {
     }
   }
 
-  return res.status(400).json({
+  return res.status(412).json({
     message: "Incomplete data.",
-    status_code: 400,
+    status_code: 412,
     success: false,
   });
 };
