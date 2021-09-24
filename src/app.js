@@ -20,4 +20,4 @@ app.use(authRoute);
 
 
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}...`))
+app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
