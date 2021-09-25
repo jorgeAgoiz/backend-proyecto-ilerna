@@ -96,7 +96,34 @@ exports.updateBook = async (req, res, next) => {
   }
 };
 
+// GET => "/books/:user_id"
+exports.getBooksOf = async (req, res, next) => {
+  const { user_id } = req.params;
+  if(!user_id) {
+    return res
+      .status(412)
+      .json({ message: "User Id not found.", status_code: 412, success: false });
+  }
+
+  try {
+    /* Aqui comenzamos con las llamadas */
+    
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: error.message, status_code: 400, success: false });
+  }
+
+  
+}
+
 // GET => "/books"
 exports.getBooks = (req, res, next) => {
-  /* Aquí obtendremos todos los libros, o bien los de un determinado usuario */
+  console.log("what up buddy??")
+}
+
+// GET => "/book/id"
+exports.getBook = (req, res, next) => {
+  const { id } = req.params;
+  console.log(id)
 }
