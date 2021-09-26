@@ -96,9 +96,13 @@ exports.updateBook = async (req, res, next) => {
   }
 };
 
-// GET => "/books/:user_id"
+// GET => "/books/:user_id?page"
 exports.getBooksOf = async (req, res, next) => {
   const { user_id } = req.params;
+  const { page } = req.query;
+  const perPage = 2;
+
+  /* Aqui paginacion */
   if (!user_id) {
     return res
       .status(412)
@@ -109,7 +113,7 @@ exports.getBooksOf = async (req, res, next) => {
     /* Aqui comenzamos con las llamadas */
     const allBooksOf = await connection.promise().execute("SELECT * FROM book WHERE id_user = ?", [user_id])
 
-    return console.log(allBooksOf[0])
+    return console.log(allBooksOf[0].length)
   } catch (error) {
     return res
       .status(400)
