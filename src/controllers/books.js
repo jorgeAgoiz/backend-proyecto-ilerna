@@ -10,7 +10,7 @@ exports.insertBook = async (req, res, next) => {
       .promise()
       .execute(
         "INSERT INTO book(title, author, category, book_description, rating, id_user) VALUES( ?, ?, ?, ?, ?, ?)",
-        [title, author, category, book_description, rating, id_user]
+        [title, author, category, book_description, rating, id_user],
       );
     if (newBook[0].affectedRows <= 0) {
       return res
@@ -104,43 +104,51 @@ exports.getBooksOf = async (req, res, next) => {
   const offset = (page - 1) * limit;
   const getQuery = `SELECT * FROM book WHERE id_user = ${user_id} limit ${limit} OFFSET ${offset}`;
   if (!user_id || !page) {
-    return res
-      .status(412)
-      .json({ message: "User Id not found.", status_code: 412, success: false });
+    return res.status(412).json({
+      message: "User Id not found.",
+      status_code: 412,
+      success: false,
+    });
   }
 
   try {
-    const totalBooksOf = await connection.promise().execute("SELECT COUNT(*) FROM book WHERE id_user = ?", [user_id]);
-    console.log(totalBooksOf)
+    const totalBooksOf = await connection
+      .promise()
+      .execute("SELECT COUNT(*) FROM book WHERE id_user = ?", [user_id]);
+
     const numBooksOf = totalBooksOf[0][0]["COUNT(*)"];
     if (numBooksOf <= 0) {
-      return res
-        .status(404)
-        .json({ message: "No books were found with the user ID entered.", status_code: 404, success: false });
+      return res.status(404).json({
+        message: "No books were found with the user ID entered.",
+        status_code: 404,
+        success: false,
+      });
     }
-    const numPages = Math.ceil(numBooksOf / limit)
+    const numPages = Math.ceil(numBooksOf / limit);
     const allBooksOf = await connection.promise().execute(getQuery);
 
-    /* console.log(allBooksOf[0])
-      Continuaremos aquí con la llamada GET
-    */
-
+    return res.status(200).json({
+      message: `Books of user_id: ${user_id}`,
+      number_pages: numPages,
+      page: page,
+      data: allBooksOf[0],
+      status_code: 200,
+      success: true,
+    });
   } catch (error) {
     return res
       .status(400)
       .json({ message: error.message, status_code: 400, success: false });
   }
-
-
-}
+};
 
 // GET => "/books"
 exports.getBooks = (req, res, next) => {
-  console.log("what up buddy??")
-}
+  console.log("what up buddy??");
+};
 
 // GET => "/book/id"
 exports.getBook = (req, res, next) => {
   const { id } = req.params;
-  console.log(id)
-}
+  console.log(id);
+};
