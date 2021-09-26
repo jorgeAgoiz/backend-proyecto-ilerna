@@ -99,7 +99,7 @@ exports.updateBook = async (req, res, next) => {
 // GET => "/books/:user_id"
 exports.getBooksOf = async (req, res, next) => {
   const { user_id } = req.params;
-  if(!user_id) {
+  if (!user_id) {
     return res
       .status(412)
       .json({ message: "User Id not found.", status_code: 412, success: false });
@@ -107,14 +107,16 @@ exports.getBooksOf = async (req, res, next) => {
 
   try {
     /* Aqui comenzamos con las llamadas */
-    
+    const allBooksOf = await connection.promise().execute("SELECT * FROM book WHERE id_user = ?", [user_id])
+
+    return console.log(allBooksOf[0])
   } catch (error) {
     return res
       .status(400)
       .json({ message: error.message, status_code: 400, success: false });
   }
 
-  
+
 }
 
 // GET => "/books"
