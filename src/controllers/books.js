@@ -100,20 +100,31 @@ exports.updateBook = async (req, res, next) => {
 exports.getBooksOf = async (req, res, next) => {
   const { user_id } = req.params;
   const { page } = req.query;
-  const perPage = 2;
-
-  /* Aqui paginacion */
-  if (!user_id) {
+  const limit = 6;
+  const offset = (page - 1) * limit;
+  const getQuery = `SELECT * FROM book WHERE id_user = ${user_id} limit ${limit} OFFSET ${offset}`;
+  if (!user_id || !page) {
     return res
       .status(412)
       .json({ message: "User Id not found.", status_code: 412, success: false });
   }
 
   try {
-    /* Aqui comenzamos con las llamadas */
-    const allBooksOf = await connection.promise().execute("SELECT * FROM book WHERE id_user = ?", [user_id])
+    const totalBooksOf = await connection.promise().execute("SELECT COUNT(*) FROM book WHERE id_user = ?", [user_id]);
+    console.log(totalBooksOf)
+    const numBooksOf = totalBooksOf[0][0]["COUNT(*)"];
+    if (numBooksOf <= 0) {
+      return res
+        .status(404)
+        .json({ message: "No books were found with the user ID entered.", status_code: 404, success: false });
+    }
+    const numPages = Math.ceil(numBooksOf / limit)
+    const allBooksOf = await connection.promise().execute(getQuery);
 
-    return console.log(allBooksOf[0].length)
+    /* console.log(allBooksOf[0])
+      Continuaremos aquí con la llamada GET
+    */
+
   } catch (error) {
     return res
       .status(400)
