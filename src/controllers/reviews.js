@@ -94,3 +94,10 @@ exports.deleteReview = async (req, res, next) => {
 exports.updateReview = (req, res, next) => {
   console.log("Patch route working!!");
 };
+
+// GET => "/review/:book_id"
+exports.getReviewsOfBook = (req, res, next) => {};
+
+// GET => "/review/:user_id"
+exports.getReviewsOfUser = (req, res, next) => {};
+/* Estas serían todas las rutas en principio del backend */
