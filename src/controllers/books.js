@@ -105,7 +105,7 @@ exports.getBooksOf = async (req, res, next) => {
   const getQuery = `SELECT * FROM book WHERE id_user = ${user_id} limit ${limit} OFFSET ${offset}`;
   if (!user_id || !page) {
     return res.status(412).json({
-      message: "User Id not found.",
+      message: "Incomplete data provided.",
       status_code: 412,
       success: false,
     });
@@ -125,6 +125,13 @@ exports.getBooksOf = async (req, res, next) => {
       });
     }
     const numPages = Math.ceil(numBooksOf / limit);
+    if (page > numPages) {
+      return res.status(404).json({
+        message: "This page does not exists.",
+        status_code: 404,
+        success: false,
+      });
+    }
     const allBooksOf = await connection.promise().execute(getQuery);
 
     return res.status(200).json({
@@ -143,12 +150,81 @@ exports.getBooksOf = async (req, res, next) => {
 };
 
 // GET => "/books"
-exports.getBooks = (req, res, next) => {
-  console.log("what up buddy??");
+exports.getBooks = async (req, res, next) => {
+  const { page } = req.query;
+  const limit = 6;
+  const offset = (page - 1) * limit;
+  const getQuery = `SELECT * FROM book limit ${limit} OFFSET ${offset}`;
+
+  try {
+    const totalBooks = await connection
+      .promise()
+      .execute("SELECT COUNT(*) FROM book");
+    const numBooks = totalBooks[0][0]["COUNT(*)"];
+    if (numBooks <= 0) {
+      return res.status(404).json({
+        message: "No books found.",
+        status_code: 404,
+        success: false,
+      });
+    }
+    const numPages = Math.ceil(numBooks / limit);
+    if (page > numPages) {
+      return res.status(404).json({
+        message: "This page does not exists.",
+        status_code: 404,
+        success: false,
+      });
+    }
+    const allBooks = await connection.promise().execute(getQuery);
+
+    return res.status(200).json({
+      message: `All books available.`,
+      number_pages: numPages,
+      page: page,
+      data: allBooks[0],
+      status_code: 200,
+      success: true,
+    });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: error.message, status_code: 400, success: false });
+  }
 };
 
 // GET => "/book/id"
-exports.getBook = (req, res, next) => {
+exports.getBook = async (req, res, next) => {
   const { id } = req.params;
-  console.log(id);
+  if (!id) {
+    return res.status(412).json({
+      message: "Incomplete data provided.",
+      status_code: 412,
+      success: false,
+    });
+  }
+
+  try {
+    const book = await connection
+      .promise()
+      .execute("SELECT * FROM book WHERE id = ?", [id]);
+
+    if (book[0].length <= 0) {
+      return res.status(404).json({
+        message: "Book not found.",
+        status_code: 404,
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: `Book with Id: ${id}`,
+      data: book[0][0],
+      status_code: 200,
+      success: true,
+    });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: error.message, status_code: 400, success: false });
+  }
 };
