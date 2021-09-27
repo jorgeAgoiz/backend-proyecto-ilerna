@@ -1,6 +1,7 @@
 const { connection } = require("../services/mysql");
 const { updateGlobalRating } = require("../utils/updateRating");
 
+// POST => "/review"
 exports.createReview = async (req, res, next) => {
   let { valoration, text_review, id_user, id_book } = req.body;
   if (!text_review) {
@@ -51,4 +52,45 @@ exports.createReview = async (req, res, next) => {
       .status(400)
       .json({ message: error.message, status_code: 400, success: false });
   }
+};
+
+// DELETE => "/review"
+exports.deleteReview = async (req, res, next) => {
+  const { id } = req.body;
+  if (!id) {
+    return res.status(412).json({
+      message: "Incomplete data provided.",
+      status_code: 412,
+      success: false,
+    });
+  }
+  try {
+    const deletedReview = await connection
+      .promise()
+      .execute("DELETE FROM review WHERE id = ?", [id]);
+
+    if (deletedReview[0].affectedRows <= 0) {
+      return res.status(400).json({
+        message: "Review not deleted.",
+        status_code: 400,
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Review deleted successfully.",
+      id_removed: id,
+      status_code: 200,
+      success: true,
+    });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: error.message, status_code: 400, success: false });
+  }
+};
+
+// PATCH => "/review"
+exports.updateReview = (req, res, next) => {
+  console.log("Patch route working!!");
 };
