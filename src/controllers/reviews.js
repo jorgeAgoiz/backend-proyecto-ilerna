@@ -1,4 +1,5 @@
 const { connection } = require("../services/mysql");
+const { updateGlobalRating } = require("../utils/updateRating");
 
 exports.createReview = async (req, res, next) => {
   let { valoration, text_review, id_user, id_book } = req.body;
@@ -13,16 +14,12 @@ exports.createReview = async (req, res, next) => {
     });
   }
   try {
-    /* Peticiones asincronas */
     const newReview = await connection
       .promise()
       .execute(
         "INSERT INTO review(valoration, text_review, id_user, id_book) values(?, ?, ?, ?)",
         [valoration, text_review, id_user, id_book],
       );
-
-    /* Una vez la petición es exitosa, debemos actualizar el rating global de ese libro 
-    con la nueva puntuación aportada por este usuario */
     if (newReview[0].affectedRows <= 0) {
       return res.status(400).json({
         message: "Review not saved.",
@@ -30,7 +27,25 @@ exports.createReview = async (req, res, next) => {
         success: false,
       });
     }
-    /* Aquí meteremos la función updateRating */
+    const newReviewId = newReview[0].insertId;
+
+    const gloRatUpd = await updateGlobalRating(id_book, valoration);
+    if (!gloRatUpd) {
+      const deleteNewReview = await connection
+        .promise()
+        .execute("DELETE FROM review WHERE id = ?", [newReviewId]);
+      return res.status(412).json({
+        message: "Review not saved.",
+        status_code: 412,
+        success: false,
+      });
+    }
+    return res.status(201).json({
+      message: "Review saved successfully.",
+      newId: newReviewId,
+      status_code: 201,
+      success: true,
+    });
   } catch (error) {
     return res
       .status(400)
