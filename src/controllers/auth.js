@@ -15,7 +15,7 @@ exports.signUp = async (req, res, next) => {
             return res
               .status(400)
               .json({ message: err.message, status_code: 400, success: false });
-          }
+          }    
           return res.status(201).json({
             message: "User saved successfully.",
             newId: results.insertId,
