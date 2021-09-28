@@ -22,7 +22,7 @@ exports.signUp = async (req, res, next) => {
             status_code: 201,
             success: true,
           });
-        }
+        },
       );
     } catch (error) {
       return res
@@ -48,7 +48,7 @@ exports.signIn = async (req, res, next) => {
       if (user[0].length > 0) {
         const matchPasswords = await comparePasswords(
           password,
-          user[0][0].password
+          user[0][0].password,
         );
 
         if (!matchPasswords) {
@@ -90,4 +90,44 @@ exports.signIn = async (req, res, next) => {
     status_code: 412,
     success: false,
   });
+};
+
+// DELETE => "/delete_account"
+exports.deleteUserAccount = async (req, res, next) => {
+  const { id, username } = req.body;
+  if (!id || !username) {
+    return res.status(412).json({
+      message: "Incomplete data.",
+      status_code: 412,
+      success: false,
+    });
+  }
+  try {
+    const userDeleted = await connection
+      .promise()
+      .execute("DELETE FROM user WHERE id = ? AND username = ?", [
+        id,
+        username,
+      ]);
+    if (userDeleted[0].affectedRows <= 0) {
+      return res.status(404).json({
+        message: "User not deleted",
+        status_code: 404,
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "User deleted",
+      user_id: id,
+      username: username,
+      status_code: 200,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: error.message,
+      status_code: 400,
+      success: false,
+    });
+  }
 };
