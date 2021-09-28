@@ -91,13 +91,112 @@ exports.deleteReview = async (req, res, next) => {
 };
 
 // PATCH => "/review"
-exports.updateReview = (req, res, next) => {
-  console.log("Patch route working!!");
+exports.updateReview = async (req, res, next) => {
+  const { id, valoration, text_review, id_user } = req.body;
+  if (!id || !valoration || !text_review || !id_user) {
+    return res.status(412).json({
+      message: "Incomplete data provided.",
+      status_code: 412,
+      success: false,
+    });
+  }
+
+  try {
+    const reviewUpdated = await connection
+      .promise()
+      .execute(
+        "UPDATE review SET valoration = ?, text_review = ? WHERE id = ? AND id_user = ?",
+        [valoration, text_review, id, id_user],
+      );
+    if (reviewUpdated[0].affectedRows <= 0) {
+      return res.status(400).json({
+        message: "Review not updated.",
+        status_code: 400,
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Review updated successfully.",
+      id_updated: id,
+      id_user: id_user,
+      status_code: 200,
+      success: true,
+    });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: error.message, status_code: 400, success: false });
+  }
 };
 
-// GET => "/review/:book_id"
-exports.getReviewsOfBook = (req, res, next) => {};
+// GET => "/book_reviews/:id_book"
+exports.getReviewsOfBook = async (req, res, next) => {
+  const { id_book } = req.params;
+  if (!id_book) {
+    return res.status(412).json({
+      message: "Incomplete data provided.",
+      status_code: 412,
+      success: false,
+    });
+  }
+  try {
+    const arrayReviews = await connection
+      .promise()
+      .execute("SELECT * FROM review WHERE id_book = ?", [id_book]);
 
-// GET => "/review/:user_id"
-exports.getReviewsOfUser = (req, res, next) => {};
-/* Estas serían todas las rutas en principio del backend */
+    if (arrayReviews[0].length <= 0) {
+      return res.status(404).json({
+        message: "No reviews were found with the book ID entered.",
+        status_code: 404,
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Reviews found with success.",
+      book_id: id_book,
+      data: arrayReviews[0],
+      status_code: 200,
+      success: true,
+    });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: error.message, status_code: 400, success: false });
+  }
+};
+
+// GET => "/user_reviews/:id_user"
+exports.getReviewsOfUser = async (req, res, next) => {
+  const { id_user } = req.params;
+  if (!id_user) {
+    return res.status(412).json({
+      message: "Incomplete data provided.",
+      status_code: 412,
+      success: false,
+    });
+  }
+
+  try {
+    const arrayReviews = await connection
+      .promise()
+      .execute("SELECT * FROM review WHERE id_user = ?", [id_user]);
+    if (arrayReviews[0].length <= 0) {
+      return res.status(404).json({
+        message: "No reviews were found with the user ID entered.",
+        status_code: 404,
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Reviews found with success.",
+      user_id: id_user,
+      data: arrayReviews[0],
+      status_code: 200,
+      success: true,
+    });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: error.message, status_code: 400, success: false });
+  }
+};
