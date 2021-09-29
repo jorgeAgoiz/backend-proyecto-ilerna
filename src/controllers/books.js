@@ -96,13 +96,13 @@ exports.updateBook = async (req, res, next) => {
   }
 };
 
-// GET => "/books/:user_id?page"
+// GET => "/books/:user_id?page&order&direction"
 exports.getBooksOf = async (req, res, next) => {
   const { user_id } = req.params;
-  const { page } = req.query;
+  const { page, order, direction } = req.query;
   const limit = 6;
   const offset = (page - 1) * limit;
-  const getQuery = `SELECT * FROM book WHERE id_user = ${user_id} limit ${limit} OFFSET ${offset}`;
+  const getQuery = `SELECT * FROM book WHERE id_user = ${user_id} ORDER BY ${order} ${direction} LIMIT ${limit} OFFSET ${offset}`;
   if (!user_id || !page) {
     return res.status(412).json({
       message: "Incomplete data provided.",
@@ -149,12 +149,12 @@ exports.getBooksOf = async (req, res, next) => {
   }
 };
 
-// GET => "/books"
+// GET => "/books?page&order&direction"
 exports.getBooks = async (req, res, next) => {
-  const { page } = req.query;
+  const { page, order, direction} = req.query;
   const limit = 6;
   const offset = (page - 1) * limit;
-  const getQuery = `SELECT * FROM book limit ${limit} OFFSET ${offset}`;
+  const getQuery = `SELECT * FROM book ORDER BY ${order} ${direction} LIMIT ${limit} OFFSET ${offset}`;
 
   try {
     const totalBooks = await connection
