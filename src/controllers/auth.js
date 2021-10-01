@@ -64,7 +64,7 @@ exports.signIn = async (req, res, next) => {
           created_at: user[0][0].created_at,
         };
         return res.status(200).json({
-          message: "User found",
+          message: "User logged",
           status_code: 200,
           user: validUser,
           success: true,
