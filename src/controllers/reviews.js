@@ -19,7 +19,7 @@ exports.createReview = async (req, res, next) => {
       .promise()
       .execute(
         "INSERT INTO review(valoration, text_review, id_user, id_book) values(?, ?, ?, ?)",
-        [valoration, text_review, id_user, id_book],
+        [valoration, text_review, id_user, id_book]
       );
     if (newReview[0].affectedRows <= 0) {
       return res.status(400).json({
@@ -106,7 +106,7 @@ exports.updateReview = async (req, res, next) => {
       .promise()
       .execute(
         "UPDATE review SET valoration = ?, text_review = ? WHERE id = ? AND id_user = ?",
-        [valoration, text_review, id, id_user],
+        [valoration, text_review, id, id_user]
       );
     if (reviewUpdated[0].affectedRows <= 0) {
       return res.status(400).json({
@@ -142,7 +142,10 @@ exports.getReviewsOfBook = async (req, res, next) => {
   try {
     const arrayReviews = await connection
       .promise()
-      .execute("SELECT * FROM review WHERE id_book = ?", [id_book]);
+      .execute(
+        "SELECT r.valoration, r.text_review, r.id_user, r.id, r.created_at, r.id_book, u.username FROM review r LEFT JOIN user u ON r.id_user = u.id WHERE r.id_book = ?",
+        [id_book]
+      );
 
     if (arrayReviews[0].length <= 0) {
       return res.status(404).json({
