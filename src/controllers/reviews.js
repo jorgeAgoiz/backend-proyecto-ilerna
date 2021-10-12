@@ -203,3 +203,40 @@ exports.getReviewsOfUser = async (req, res, next) => {
       .json({ message: error.message, status_code: 400, success: false });
   }
 };
+
+// GET "/review/:id"
+exports.getReview = async (req, res, next) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(412).json({
+      message: "Incomplete data provided.",
+      status_code: 412,
+      success: false,
+    });
+  }
+
+  try {
+    const specificReview = await connection
+      .promise()
+      .execute("SELECT * FROM review WHERE id = ?", [id]);
+    if (specificReview[0].length <= 0) {
+      return res.status(404).json({
+        message: "No review were found with the ID entered.",
+        status_code: 404,
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Review found with success.",
+      id_review: id,
+      data: specificReview[0][0],
+      status_code: 200,
+      success: true,
+    });
+
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: error.message, status_code: 400, success: false });
+  }
+};

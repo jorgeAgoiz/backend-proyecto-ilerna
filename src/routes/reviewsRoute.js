@@ -5,6 +5,7 @@ const {
   getReviewsOfBook,
   getReviewsOfUser,
   updateReview,
+  getReview,
 } = require("../controllers/reviews");
 
 const reviewsRoute = express.Router();
@@ -14,5 +15,6 @@ reviewsRoute.delete("/review", deleteReview);
 reviewsRoute.get("/book_reviews/:id_book", getReviewsOfBook);
 reviewsRoute.get("/user_reviews/:id_user", getReviewsOfUser);
 reviewsRoute.patch("/review", updateReview);
+reviewsRoute.get("/review/:id", getReview);
 
 module.exports = reviewsRoute;
