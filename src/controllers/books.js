@@ -85,7 +85,7 @@ exports.updateBook = async (req, res, next) => {
     }
     return res.status(200).json({
       message: "Book updated successfully.",
-      id_removed: id,
+      id_updated: id,
       status_code: 200,
       success: true,
     });
