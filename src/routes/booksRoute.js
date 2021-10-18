@@ -1,5 +1,5 @@
 const express = require("express");
-const { insertBook, deleteBook, updateBook, getBooks, getBooksOf, getBook } = require("../controllers/books");
+const { insertBook, deleteBook, updateBook, getBooks, getBooksOf, getBook, getBookByTitle } = require("../controllers/books");
 
 const booksRoute = express.Router();
 
@@ -9,5 +9,6 @@ booksRoute.patch("/books", updateBook);
 booksRoute.get("/books/:user_id", getBooksOf);
 booksRoute.get("/books", getBooks)
 booksRoute.get("/book/:id", getBook);
+booksRoute.get("/book-title/:title", getBookByTitle)
 
 module.exports = booksRoute;

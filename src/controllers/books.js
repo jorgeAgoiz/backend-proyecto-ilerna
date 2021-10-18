@@ -228,3 +228,39 @@ exports.getBook = async (req, res, next) => {
       .json({ message: error.message, status_code: 400, success: false });
   }
 };
+
+// GET => "/title-book/:title"
+exports.getBookByTitle = async (req, res, next) => {
+  const { title } = req.params
+  if (!title) {
+    return res.status(412).json({
+      message: "Incomplete data provided.",
+      status_code: 412,
+      success: false,
+    });
+  }
+
+  try {
+    const book = await connection
+      .promise()
+      .execute("SELECT * FROM book WHERE title = ?", [title]);
+
+    if (book[0].length <= 0) {
+      return res.status(404).json({
+        message: "Book not found.",
+        status_code: 404,
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: `Book with title: ${title}`,
+      data: book[0][0],
+      status_code: 200,
+      success: true,
+    });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: error.message, status_code: 400, success: false });
+  }
+}
