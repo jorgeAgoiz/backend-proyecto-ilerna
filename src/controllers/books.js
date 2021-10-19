@@ -229,7 +229,7 @@ exports.getBook = async (req, res, next) => {
   }
 };
 
-// GET => "/title-book/:title"
+// GET => "/book-title/:title"
 exports.getBookByTitle = async (req, res, next) => {
   const { title } = req.params
   if (!title) {
