@@ -9,8 +9,8 @@ exports.insertBook = async (req, res, next) => {
     const newBook = await connection
       .promise()
       .execute(
-        "INSERT INTO book(title, author, category, book_description, rating, id_user) VALUES( ?, ?, ?, ?, ?, ?)",
-        [title, author, category, book_description, rating, id_user],
+        "INSERT INTO book(title, author, category, book_description, rating, average, id_user) VALUES( ?, ?, ?, ?, ?, ?, ?)",
+        [title, author, category, book_description, rating, rating, id_user],
       );
     if (newBook[0].affectedRows <= 0) {
       return res
@@ -61,14 +61,14 @@ exports.deleteBook = async (req, res, next) => {
 
 // PATCH => "/books"
 exports.updateBook = async (req, res, next) => {
-  const { title, author, category, book_description, rating, id } = req.body;
+  const { title, author, category, book_description, rating, average, id } = req.body;
   let queryString =
-    "UPDATE book SET title = ?, author = ?, category = ?, book_description = ? WHERE id = ?";
-  let queryArray = [title, author, category, book_description, id];
+    "UPDATE book SET title = ?, author = ?, category = ?, book_description = ?, rating = ? WHERE id = ?";
+  let queryArray = [title, author, category, book_description, rating, id];
 
-  if (rating) {
-    queryString = "UPDATE book SET rating = ? WHERE id = ?";
-    queryArray = [rating, id];
+  if (average) {
+    queryString = "UPDATE book SET average = ? WHERE id = ?";
+    queryArray = [average, id];
   }
 
   try {
