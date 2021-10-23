@@ -148,9 +148,11 @@ exports.getReviewsOfBook = async (req, res, next) => {
       );
 
     if (arrayReviews[0].length <= 0) {
-      return res.status(404).json({
+      return res.status(200).json({
         message: "No reviews were found with the book ID entered.",
-        status_code: 404,
+        book_id: id_book,
+        data: [],
+        status_code: 200,
         success: false,
       });
     }
