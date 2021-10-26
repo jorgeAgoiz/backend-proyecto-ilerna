@@ -184,7 +184,7 @@ exports.getReviewsOfUser = async (req, res, next) => {
   try {
     const arrayReviews = await connection
       .promise()
-      .execute("SELECT * FROM review WHERE id_user = ?", [id_user]);
+      .execute("SELECT r.valoration, r.text_review, r.id_user, r.id, r.created_at, b.title FROM review r LEFT JOIN book b ON r.id_book = b.id WHERE r.id_user = ?", [id_user]);
     if (arrayReviews[0].length <= 0) {
       return res.status(404).json({
         message: "No reviews were found with the user ID entered.",
