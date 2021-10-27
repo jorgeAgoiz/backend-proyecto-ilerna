@@ -184,11 +184,13 @@ exports.getReviewsOfUser = async (req, res, next) => {
   try {
     const arrayReviews = await connection
       .promise()
-      .execute("SELECT r.valoration, r.text_review, r.id_user, r.id, r.created_at, b.title FROM review r LEFT JOIN book b ON r.id_book = b.id WHERE r.id_user = ?", [id_user]);
+      .execute("SELECT r.valoration, r.text_review, r.id_book, r.id_user, r.id, r.created_at, b.title FROM review r LEFT JOIN book b ON r.id_book = b.id WHERE r.id_user = ?", [id_user]);
     if (arrayReviews[0].length <= 0) {
-      return res.status(404).json({
+      return res.status(200).json({
         message: "No reviews were found with the user ID entered.",
-        status_code: 404,
+        data: [],
+        user_id: id_user,
+        status_code: 200,
         success: false,
       });
     }

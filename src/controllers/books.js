@@ -115,9 +115,10 @@ exports.getBooksOf = async (req, res, next) => {
 
     const numBooksOf = totalBooksOf[0][0]["COUNT(*)"];
     if (numBooksOf <= 0) {
-      return res.status(404).json({
+      return res.status(200).json({
         message: "No books were found with the user ID entered.",
-        status_code: 404,
+        data: [],
+        status_code: 200,
         success: false,
       });
     }
