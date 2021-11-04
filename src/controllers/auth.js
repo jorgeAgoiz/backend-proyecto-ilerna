@@ -1,7 +1,7 @@
 const { connection } = require("../services/mysql");
 const { hashYourPassword, comparePasswords } = require("../utils/hashPassword");
 
-// POST => "/signup"
+// POST => "/signup" ** Crear Usuario
 exports.signUp = async (req, res, next) => {
   const { username, password } = req.body;
   if (username && password) {
@@ -35,7 +35,7 @@ exports.signUp = async (req, res, next) => {
     .json({ message: "Incomplete data.", status_code: 412, success: false });
 };
 
-// POST => "/signin"
+// POST => "/signin" ** Autenticar usuario
 exports.signIn = async (req, res, next) => {
   const { username, password } = req.body;
 
@@ -92,7 +92,7 @@ exports.signIn = async (req, res, next) => {
   });
 };
 
-// DELETE => "/delete_account"
+// DELETE => "/delete_account" ** Eliminar usuario
 exports.deleteUserAccount = async (req, res, next) => {
   const { id, username } = req.body;
   if (!id || !username) {

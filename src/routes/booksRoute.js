@@ -1,8 +1,10 @@
+// ****************************************** Rutas de Libros
 const express = require("express");
 const { insertBook, deleteBook, updateBook, getBooks, getBooksOf, getBook, getBookByTitle } = require("../controllers/books");
 
 const booksRoute = express.Router();
 
+// Rutas asignadas a controladores
 booksRoute.post("/books", insertBook);
 booksRoute.delete("/books", deleteBook);
 booksRoute.patch("/books", updateBook);

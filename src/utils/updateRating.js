@@ -1,5 +1,7 @@
 const { connection } = require("../services/mysql");
 
+// Función para actualizar la media de un libro cada vez que se añada 
+// una valoración nueva a dicho libro
 exports.updateGlobalRating = async (id_book) => {
   let valorations = 0;
   const numberOfReviews = await connection

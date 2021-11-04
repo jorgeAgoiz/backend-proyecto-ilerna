@@ -1,6 +1,5 @@
 const mysql = require("mysql2");
 
-
 // Variables de entorno
 const HOSTDB = process.env.MYSQL_HOST;
 const USERDB = process.env.MYSQL_USER;
@@ -18,7 +17,7 @@ exports.connection = mysql.createConnection(
     database: NAMEDB
   },
   (err) => {
-    console.log(err); // Manejar ese error
+    return console.log(err);
   }
 );
 

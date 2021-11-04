@@ -1,7 +1,7 @@
 const { connection } = require("../services/mysql");
 const { updateGlobalRating } = require("../utils/updateRating");
 
-// POST => "/review"
+// POST => "/review" ** Añadir Reseña
 exports.createReview = async (req, res, next) => {
   let { valoration, text_review, id_user, id_book } = req.body;
   if (!text_review) {
@@ -54,7 +54,7 @@ exports.createReview = async (req, res, next) => {
   }
 };
 
-// DELETE => "/review"
+// DELETE => "/review" ** Eliminar Reseña
 exports.deleteReview = async (req, res, next) => {
   const { id } = req.body;
   if (!id) {
@@ -90,7 +90,7 @@ exports.deleteReview = async (req, res, next) => {
   }
 };
 
-// PATCH => "/review"
+// PATCH => "/review" ** Modificar Reseña
 exports.updateReview = async (req, res, next) => {
   const { id, valoration, text_review, id_user } = req.body;
   if (!id || !valoration || !text_review || !id_user) {
@@ -129,7 +129,7 @@ exports.updateReview = async (req, res, next) => {
   }
 };
 
-// GET => "/book_reviews/:id_book"
+// GET => "/book_reviews/:id_book" ** Obtener reseñas de un libro por id_book
 exports.getReviewsOfBook = async (req, res, next) => {
   const { id_book } = req.params;
   if (!id_book) {
@@ -170,7 +170,7 @@ exports.getReviewsOfBook = async (req, res, next) => {
   }
 };
 
-// GET => "/user_reviews/:id_user"
+// GET => "/user_reviews/:id_user" ** Obtener reseñas de un usuario por id_user
 exports.getReviewsOfUser = async (req, res, next) => {
   const { id_user } = req.params;
   if (!id_user) {
@@ -208,7 +208,7 @@ exports.getReviewsOfUser = async (req, res, next) => {
   }
 };
 
-// GET "/review/:id"
+// GET "/review/:id" ** Obtener reseña específica por ID
 exports.getReview = async (req, res, next) => {
   const { id } = req.params;
   if (!id) {

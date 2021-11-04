@@ -1,3 +1,4 @@
+// ****************************************** Rutas de Reseñas
 const express = require("express");
 const {
   createReview,
@@ -10,6 +11,7 @@ const {
 
 const reviewsRoute = express.Router();
 
+// Rutas asignadas a controladores
 reviewsRoute.post("/review", createReview);
 reviewsRoute.delete("/review", deleteReview);
 reviewsRoute.get("/book_reviews/:id_book", getReviewsOfBook);

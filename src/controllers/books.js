@@ -1,6 +1,6 @@
 const { connection } = require("../services/mysql");
 
-// POST => "/books"
+// POST => "/books" ** Insertar Libro
 exports.insertBook = async (req, res, next) => {
   const { title, author, category, book_description, rating, id_user } =
     req.body;
@@ -31,7 +31,7 @@ exports.insertBook = async (req, res, next) => {
   }
 };
 
-// DELETE "/books"
+// DELETE "/books" ** Eliminar Libro
 exports.deleteBook = async (req, res, next) => {
   const { id } = req.body;
 
@@ -59,7 +59,7 @@ exports.deleteBook = async (req, res, next) => {
   }
 };
 
-// PATCH => "/books"
+// PATCH => "/books" ** Modificar Libro
 exports.updateBook = async (req, res, next) => {
   const { title, author, category, book_description, rating, average, id } = req.body;
   let queryString =
@@ -96,7 +96,7 @@ exports.updateBook = async (req, res, next) => {
   }
 };
 
-// GET => "/books/:user_id"
+// GET => "/books/:user_id" ** Obtener libros de un usuario por id_user
 exports.getBooksOf = async (req, res, next) => {
   const { user_id } = req.params;
   const getQuery = `SELECT * FROM book WHERE id_user = ${user_id} ORDER BY created_at DESC`;
@@ -139,7 +139,7 @@ exports.getBooksOf = async (req, res, next) => {
   }
 };
 
-// GET => "/books?page&order&direction"
+// GET => "/books?page&order&direction" ** Obtener libros con paginación ( pagina, orden, dirección )
 exports.getBooks = async (req, res, next) => {
   const { page, order, direction} = req.query;
   const limit = 6;
@@ -183,7 +183,7 @@ exports.getBooks = async (req, res, next) => {
   }
 };
 
-// GET => "/book/id"
+// GET => "/book/id" ** Obtener libro específico por id
 exports.getBook = async (req, res, next) => {
   const { id } = req.params;
   if (!id) {
@@ -219,7 +219,7 @@ exports.getBook = async (req, res, next) => {
   }
 };
 
-// GET => "/book-title/:title"
+// GET => "/book-title/:title" ** Obtener libro específico por título
 exports.getBookByTitle = async (req, res, next) => {
   const { title } = req.params
   if (!title) {
