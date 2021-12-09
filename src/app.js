@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 const express = require("express");
+const cors = require("cors");
 const authRoute = require("./routes/authRoute");
 const booksRoute = require("./routes/booksRoute");
 const reviewsRoute = require("./routes/reviewsRoute");
@@ -14,18 +15,7 @@ const PORT = process.env.PORT;
 const app = express();
 
 // Middlewares
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "OPTIONS, GET, POST, PUT, PATCH, DELETE"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, x-access-token"
-  );
-  next();
-});
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
